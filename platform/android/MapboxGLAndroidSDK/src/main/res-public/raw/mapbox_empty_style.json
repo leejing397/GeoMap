@@ -1,0 +1,23 @@
+{
+  "version": 8,
+  "name": "empty",
+  "metadata": {
+    "mapbox:autocomposite": true
+  },
+  "sources": {
+    "mapbox": {
+      "type": "raster",
+      "url": "mapbox://mapbox.satellite",
+      "tileSize": 256
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "rgb(4,7,14)"
+      }
+    }
+  ]
+}

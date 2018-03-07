@@ -1,0 +1,28 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+        classpath 'com.amazonaws:aws-devicefarm-gradle-plugin:1.2'
+        classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.2.1'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.google.com' }
+        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.3'
+}
+
+apply from: rootProject.file('dependencies.gradle')
+
+// Load build system information. If this file does not exist, run
+// `make platform/android/configuration.gradle`
+apply from: rootProject.file('configuration.gradle')

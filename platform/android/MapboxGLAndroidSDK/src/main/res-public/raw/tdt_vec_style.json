@@ -1,0 +1,48 @@
+{
+  "version": 8,
+  "name": "tdt_vec",
+  "metadata": {
+    "mapbox:autocomposite": true
+  },
+  "sources": {
+    "vec_w": {
+      "type": "raster",
+      "tiles": [
+        "http://t0.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}",
+        "http://t1.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}",
+        "http://t2.tianditu.com/DataServer?T=vec_w&x={x}&y={y}&l={z}"
+      ],
+      "tileSize": 256,
+      "maxzoom": 18
+    },
+    "cva_w": {
+      "type": "raster",
+      "tiles": [
+        "http://t0.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}",
+        "http://t1.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}",
+        "http://t2.tianditu.com/DataServer?T=cva_w&x={x}&y={y}&l={z}"
+      ],
+      "tileSize": 256,
+      "maxzoom": 18
+    }
+  },
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {
+        "background-color": "rgb(4,7,14)"
+      }
+    },
+    {
+      "id": "vec_w",
+      "type": "raster",
+      "source": "vec_w"
+    },
+    {
+      "id": "cva_w",
+      "type": "raster",
+      "source": "cva_w"
+    }
+  ]
+}

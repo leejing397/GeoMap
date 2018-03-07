@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.geocompass.snmapboxdemo.MainActivity">
+
+    <com.mapbox.mapboxsdk.maps.MapView
+        android:id="@+id/map_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:mapbox_cameraTargetLat="39.902615"
+        app:mapbox_cameraTargetLng="116.972326"
+        app:mapbox_cameraZoom="6"
+        app:mapbox_styleUrl="@string/mapbox_style_mapbox_streets"
+        />
+
+    <ImageButton
+        android:id="@+id/iv_my_location"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@android:drawable/ic_menu_mylocation"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"/>
+
+    <Button
+        android:id="@+id/btn_select_feature"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:text="选择要素"
+        android:background="@color/colorNormal"
+        android:textColor="#ffffff"/>
+
+    <Button
+        android:id="@+id/btn_add_marker"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_below="@id/btn_select_feature"
+        android:background="@color/colorNormal"
+        android:text="添加标注"
+        android:textColor="#ffffff"/>
+</RelativeLayout>

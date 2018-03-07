@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<issues format="4" by="lint 2.3.3">
+
+    <issue
+        id="ResourceName"
+        message="Resource named &apos;`empty_style`&apos; does not start with the project&apos;s resource prefix &apos;`mapbox_`&apos;; rename to &apos;`mapbox_empty_style`&apos; ?">
+        <location
+            file="src/main/res-public/raw/empty_style.json"/>
+    </issue>
+
+    <issue
+        id="ResourceName"
+        message="Resource named &apos;`style`&apos; does not start with the project&apos;s resource prefix &apos;`mapbox_`&apos;; rename to &apos;`mapbox_style`&apos; ?">
+        <location
+            file="src/main/res-public/raw/style.json"/>
+    </issue>
+
+</issues>

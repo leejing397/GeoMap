@@ -1,0 +1,128 @@
+module: GeoMap
+author: Geocompass
+author_url: https://www.geo-compass.com/
+github_url: https://github.com/mapbox/mapbox-gl-native
+dash_url: https://www.mapbox.com/ios-sdk/docsets/Mapbox.xml
+copyright: '© 2014–2017 [Mapbox](https://www.mapbox.com/). See [license](https://github.com/mapbox/mapbox-gl-native/blob/master/LICENSE.md) for more details.'
+
+head: |
+  <link rel='shortcut icon' href='https://www.mapbox.com/img/favicon.ico' type='image/x-icon' />
+
+objc: Yes
+skip_undocumented: Yes
+hide_documentation_coverage: Yes
+umbrella_header: src/Geocompass.h
+framework_root: ../darwin/src
+
+custom_categories:
+  - name: Guides
+    children:
+      - Adding Points to a Map
+      - Runtime Styling
+      - Using Style Functions at Runtime
+      - Working with Mapbox Studio
+      - Working with GeoJSON Data
+      - For Style Authors
+      - Tile URL Templates
+      - Info.plist Keys
+      - Gesture Recognizers
+  - name: Maps
+    children:
+      - GCLAccountManager
+      - GCLMapCamera
+      - GCLMapView
+      - GCLMapViewDelegate
+      - GCLUserTrackingMode
+  - name: Primitive Shapes
+    children:
+      - GCLAnnotation
+      - GCLOverlay
+      - GCLShape
+      - GCLMultiPoint
+      - GCLPointAnnotation
+      - GCLPointCollection
+      - GCLPolygon
+      - GCLPolyline
+      - GCLMultiPolygon
+      - GCLMultiPolyline
+      - GCLShapeCollection
+  - name: Annotations
+    children:
+      - GCLAnnotationImage
+      - GCLAnnotationView
+      - GCLUserLocation
+      - GCLUserLocationAnnotationView
+  - name: User Interaction
+    children:
+      - GCLCalloutView
+      - GCLCalloutViewDelegate
+  - name: Styling the Map
+    children:
+      - GCLStyle
+      - GCLStyleValue
+      - GCLLight
+  - name: Style Primitives
+    children:
+      - GCLFeature
+      - GCLPointFeature
+      - GCLPolygonFeature
+      - GCLPolylineFeature
+      - GCLMultiPolygonFeature
+      - GCLMultiPolylineFeature
+      - GCLPointCollectionFeature
+      - GCLShapeCollectionFeature
+  - name: Style Content
+    children:
+      - GCLSource
+      - GCLTileSource
+      - GCLImageSource
+      - GCLShapeSource
+      - GCLRasterSource
+      - GCLVectorSource
+  - name: Style Layers
+    children:
+      - GCLStyleLayer
+      - GCLForegroundStyleLayer
+      - GCLBackgroundStyleLayer
+      - GCLRasterStyleLayer
+      - GCLVectorStyleLayer
+      - GCLCircleStyleLayer
+      - GCLFillStyleLayer
+      - GCLFillExtrusionStyleLayer
+      - GCLLineStyleLayer
+      - GCLSymbolStyleLayer
+  - name: Offline Maps
+    children:
+      - GCLOfflineRegion
+      - GCLOfflineStorage
+      - GCLOfflinePack
+      - GCLOfflinePackProgress
+      - GCLOfflinePackState
+      - GCLTilePyramidOfflineRegion
+  - name: Geometry
+    children:
+      - GCLCoordinateBounds
+      - GCLCoordinateBoundsEqualToCoordinateBounds
+      - GCLCoordinateBoundsGetCoordinateSpan
+      - GCLCoordinateBoundsIntersectsCoordinateBounds
+      - GCLCoordinateBoundsIsEmpty
+      - GCLCoordinateBoundsMake
+      - GCLCoordinateBoundsOffset
+      - GCLCoordinateInCoordinateBounds
+      - GCLCoordinateQuad
+      - GCLCoordinateQuadMake
+      - GCLCoordinateQuadFromCoordinateBounds
+      - GCLCoordinateSpan
+      - GCLCoordinateSpanEqualToCoordinateSpan
+      - GCLCoordinateSpanMake
+      - GCLCoordinateSpanZero
+      - GCLDegreesFromRadians
+      - GCLRadiansFromDegrees
+      - GCLStringFromCoordinateBounds
+      - GCLStringFromCoordinateQuad
+  - name: Formatters
+    children:
+      - GCLClockDirectionFormatter
+      - GCLCompassDirectionFormatter
+      - GCLCoordinateFormatter
+      - GCLDistanceFormatter

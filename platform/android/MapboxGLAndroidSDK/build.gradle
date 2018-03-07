@@ -1,0 +1,169 @@
+apply plugin: 'com.android.library'
+
+dependencies {
+    compile rootProject.ext.dep.supportAnnotations
+    compile rootProject.ext.dep.supportFragmentV4
+    compile rootProject.ext.dep.supportAppcompatV7
+    compile rootProject.ext.dep.timber
+    compile rootProject.ext.dep.okhttp3
+    compile rootProject.ext.dep.mapboxJavaServices
+    compile rootProject.ext.dep.mapboxJavaGeoJSON
+    compile rootProject.ext.dep.mapboxAndroidTelemetry
+
+    provided(rootProject.ext.dep.lost) {
+        exclude group: 'com.google.guava'
+        exclude group: 'com.android.support'
+    }
+
+    testCompile rootProject.ext.dep.junit
+    testCompile rootProject.ext.dep.mockito
+
+    // Mapbox Android Services (GeoJSON support)
+    compile(rootProject.ext.dep.mapboxJavaGeoJSON) {
+        transitive = true
+    }
+
+
+    // Mapbox Android Services (Telemetry support)
+    compile(rootProject.ext.dep.mapboxAndroidTelemetry) {
+        transitive = true
+        exclude group: 'com.android.support'
+    }
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        buildConfigField "String", "GIT_REVISION_SHORT", String.format("\"%s\"", getGitRevision())
+        buildConfigField "String", "MAPBOX_VERSION_STRING", String.format("\"Mapbox/%s\"", project.VERSION_NAME)
+        buildConfigField "String", "MAPBOX_EVENTS_USER_AGENT", String.format("\"MapboxEventsAndroid/%s\"", project.VERSION_NAME)
+        vectorDrawables.useSupportLibrary = true
+    }
+
+    defaultPublishConfig project.hasProperty("mapbox.buildtype") ? project.getProperty("mapbox.buildtype") : "debug"
+
+    // We sometimes want to invoke Gradle without building a native dependency, e.g. when we just want
+    // to invoke the Java tests. When we explicitly specify an ABI of 'none', no native dependencies are
+    // added. When another ABI is specified explicitly, we're just going to build that ABI. In all other
+    // cases, all ABIs are built.
+    //
+    // When invoking from the command line or to override the device default, set `-Pmapbox.abis=...` to
+    // only build the desired architectures.
+    //
+    // When building from Android Studio, gradle.properties sets `android.buildOnlyTargetAbi=true` so that
+    // only the architecture for the device you're running on gets built.
+    def abi = 'all'
+    if (!project.hasProperty('android.injected.invoked.from.ide') || project.hasProperty("mapbox.abis")) {
+        // Errors when the user invokes Gradle from the command line and didn't set mapbox.abis
+        abi = project.getProperty("mapbox.abis")
+    }
+
+    if (abi != 'none') {
+        externalNativeBuild {
+            cmake {
+                path "../../../CMakeLists.txt"
+            }
+        }
+    }
+
+    defaultConfig {
+        if (abi != 'none') {
+            externalNativeBuild {
+                cmake {
+                    arguments "-DANDROID_TOOLCHAIN=clang"
+                    arguments "-DANDROID_STL=c++_static"
+                    arguments "-DANDROID_CPP_FEATURES=rtti;exceptions"
+                    arguments "-DMBGL_PLATFORM=android"
+                    arguments "-DMASON_PLATFORM=android"
+                    arguments "-DNodeJS_EXECUTABLE=" + rootProject.ext.node
+                    arguments "-Dnpm_EXECUTABLE=" + rootProject.ext.npm
+
+                    // Enable ccache if the user has installed it.
+                    if (rootProject.ext.ccache?.trim()) {
+                        arguments "-DANDROID_CCACHE=" + rootProject.ext.ccache
+                        // ccache splits up the compile command until multiple invocations and uses -E
+                        // with one of them, and clang doesn't like unused arguments in that case.
+                        cFlags "-Qunused-arguments"
+                        cppFlags "-Qunused-arguments"
+                    }
+
+                    targets "mapbox-gl"
+
+                    if (defaultPublishConfig.equalsIgnoreCase("debug")) {
+                        targets "example-custom-layer"
+                    }
+
+                    if (project.hasProperty("mapbox.with_test")) {
+                        targets "mbgl-test"
+                    }
+
+                    if (abi != 'all') {
+                        abiFilters abi.split(' ')
+                    } else {
+                        abiFilters  "arm64-v8a", "x86_64","armeabi", "armeabi-v7a", "mips", "x86"
+                    }
+                }
+            }
+        }
+
+        // proguard config for .aar
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    // avoid naming conflicts, force usage of prefix
+    resourcePrefix 'mapbox_'
+
+    sourceSets {
+        // limit amount of exposed library resources
+        main.res.srcDirs += 'src/main/res-public'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions {
+        disable 'MissingTranslation', 'TypographyQuotes'
+        baseline file("lint-baseline-local.xml")
+        checkAllWarnings true
+        warningsAsErrors false
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
+    buildTypes {
+        debug {
+            jniDebuggable true
+        }
+
+        release {
+            // aar proguard configuration
+            jniDebuggable false
+        }
+    }
+}
+
+def getGitRevision() {
+    def cmd = "git rev-parse --short HEAD"
+    def proc = cmd.execute()
+    def ref = proc.text.trim()
+    return ref
+}
+
+configurations {
+    all*.exclude group: 'commons-logging', module: 'commons-logging'
+    all*.exclude group: 'commons-collections', module: 'commons-collections'
+}
+
+apply from: 'gradle-javadoc.gradle'
+apply from: 'gradle-publish.gradle'
+apply from: 'gradle-checkstyle.gradle'
+apply from: 'gradle-tests-staticblockremover.gradle'
+apply from: '../gradle-lint.gradle'
